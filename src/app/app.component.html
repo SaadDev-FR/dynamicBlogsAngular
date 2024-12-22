@@ -1,0 +1,43 @@
+<form [formGroup]="updateBlogForm" (ngSubmit)="submitForm()">
+  <!-- Main Section -->
+  <div>
+    <h2>Main Section</h2>
+    <input formControlName="mainHeading" placeholder="Main Heading">
+    <textarea formControlName="mainDescription" placeholder="Main Description"></textarea>
+    <input formControlName="blogName" placeholder="Blog Name">
+    <input formControlName="category" placeholder="Category">
+    <input formControlName="mainImage" placeholder="Main Image">
+  </div>
+
+  <!-- Subsections -->
+  <div formArrayName="subSections">
+    <div *ngFor="let subSection of getSubSections().controls; let subIndex = index" [formGroupName]="subIndex">
+      <h3>Subsection {{ subIndex + 1 }}</h3>
+      <input formControlName="subHeading" placeholder="Sub Heading">
+      <textarea formControlName="description" placeholder="Description"></textarea>
+      <input formControlName="image" placeholder="Subsection Image">
+
+      <!-- Descriptions -->
+      <div formArrayName="descriptions">
+        <div *ngFor="let description of getDescriptions(subIndex).controls; let descIndex = index" [formGroupName]="descIndex">
+          <textarea formControlName="text" placeholder="Description {{ descIndex + 1 }}"></textarea>
+          <button type="button" (click)="addDescriptionUnder(subIndex, descIndex)">Add Description Below</button>
+
+          <!-- Bullets -->
+          <div formArrayName="bullets">
+            <div *ngFor="let bullet of getBulletsForDescription(subIndex, descIndex).controls; let bulletIndex = index">
+              <input [formControlName]="bulletIndex" placeholder="Bullet {{ bulletIndex + 1 }}">
+            </div>
+            <button type="button" (click)="addBulletForDescription(subIndex, descIndex)">Add Bullet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Subsection Button -->
+  <button type="button" (click)="addSubsection()">Add Subsection</button>
+
+  <!-- Submit Button -->
+  <button type="submit">Submit Blog</button>
+</form>
